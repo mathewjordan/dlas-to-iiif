@@ -1,11 +1,13 @@
+require("dotenv").config();
+
 const fs = require("fs");
 const { IIIFBuilder } = require("iiif-builder");
 const slugify = require("slugify");
 
 // set constants
-const path = "data/buncbome-county-slave-deeds--test.json";
+const path = "data/buncombe-county-slave-deeds--test.json";
 const dir = "dist/api";
-const baseUrl = "https://example.org/api";
+const apiUrl = `${process.env.DLAS_URL}/api`;
 
 // get data
 const data = fs.readFileSync(path, {});
@@ -23,7 +25,7 @@ const listing = json.map((item) => {
   const filename = `${id}.json`;
   return {
     filename,
-    id: `${baseUrl}/manifest/${filename}`,
+    id: `${apiUrl}/manifest/${filename}`,
     ...item,
   };
 });
@@ -40,7 +42,7 @@ listing.forEach((item) => createManifest(item));
 function createCollection(items, options) {
   const builder = new IIIFBuilder();
   const collectionNormalized = builder.createCollection(
-    `${baseUrl}/collection/deeds.json`,
+    `${apiUrl}/collection/deeds.json`,
     (collection) => {
       collection.addLabel(options?.label);
       items.forEach((item) => {

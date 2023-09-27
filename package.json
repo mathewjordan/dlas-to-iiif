@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/mathewjordan/dlas-to-iiif#readme",
   "dependencies": {
+    "dotenv": "^16.3.1",
     "iiif-builder": "^1.0.6",
     "slugify": "^1.6.6",
     "vite": "^4.4.9"
