@@ -48,6 +48,13 @@ function createCollection(items, options) {
       items.forEach((item) => {
         collection.createManifest(item.id, (manifest) => {
           manifest.addLabel(item.deed_identifier);
+          manifest.addThumbnail({
+            id: item.deed_img,
+            type: "Image",
+            format: "image/jpeg",
+            width: 200,
+            height: 200,
+          });
         });
       });
     }
@@ -67,7 +74,26 @@ function createCollection(items, options) {
 function createManifest(item) {
   const builder = new IIIFBuilder();
   const manifestNormalized = builder.createManifest(item.id, (manifest) => {
+    const painting = item.deed_img.replace("thumb", "full");
+    const baseId = item.id.replace("json", "");
+
     manifest.addLabel(item.deed_identifier);
+    manifest.createCanvas(`${baseId}/canvas/0`, (canvas) => {
+      canvas.width = 1200;
+      canvas.height = 1200;
+      canvas.createAnnotation(`${baseId}/annotation/0`, {
+        id: `${baseId}/annotation/0`,
+        type: "Annotation",
+        motivation: "painting",
+        body: {
+          id: painting,
+          type: "Image",
+          format: "image/jpg",
+          height: 1200,
+          width: 1200,
+        },
+      });
+    });
   });
 
   const manifest = builder.toPresentation3({
