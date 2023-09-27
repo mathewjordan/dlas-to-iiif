@@ -78,6 +78,20 @@ function createManifest(item) {
     const baseId = item.id.replace("json", "");
 
     manifest.addLabel(item.deed_identifier);
+    manifest.addMetadata(
+      { none: ["Deed Identifier"] },
+      { none: [item.deed_identifier] }
+    );
+    manifest.addMetadata(
+      { none: ["Deed County"] },
+      { none: [item.deed_county] }
+    );
+    manifest.addMetadata({ none: ["Deed Date"] }, { none: [item.deed_date] });
+    manifest.addMetadata(
+      { none: ["Document Type"] },
+      { none: [item.document_type] }
+    );
+
     manifest.createCanvas(`${baseId}/canvas/0`, (canvas) => {
       canvas.width = 1200;
       canvas.height = 1200;
