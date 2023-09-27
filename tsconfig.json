@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "./",
+    "declaration": true,
+    "declarationDir": "dist",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "isolatedModules": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "noEmitHelpers": true,
+    "outDir": "dist",
+    "resolveJsonModule": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "skipLibCheck": true,
+    "strict": false,
+    "strictNullChecks": true,
+    "target": "esnext",
+    "types": ["vitest/globals", "node"]
+  },
+  "paths": {
+    "data/*": ["data/*"],
+    "src/*": ["src/*"]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "../index.ts",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["dist", "node_modules", "vite.*"]
+}
