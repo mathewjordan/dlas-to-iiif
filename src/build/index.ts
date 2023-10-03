@@ -153,10 +153,12 @@ function createManifest(item) {
       format: "text/html",
     });
 
-    manifest.setPartOf({
-      id: `${apiUrl}/collection/deeds.json`,
-      type: "Collection",
-    });
+    manifest.setPartOf([
+      {
+        id: `${apiUrl}/collection/deeds.json`,
+        type: "Collection",
+      },
+    ]);
 
     manifest.createCanvas(`${baseId}/canvas/0`, (canvas) => {
       canvas.width = 1200;
