@@ -67,6 +67,8 @@ function createCollection(items, options) {
 
   fs.writeFileSync(`${dir}/collection/deeds.json`, JSON.stringify(collection));
 
+  console.log(`Created collection/deeds.json`);
+
   return;
 }
 
@@ -100,6 +102,50 @@ function createManifest(item) {
         { none: [item.document_type] }
       );
 
+    if (item.book)
+      manifest.addMetadata({ none: ["Book"] }, { none: [item.book] });
+
+    if (item.deed_notes)
+      manifest.addMetadata({ none: ["Notes"] }, { none: [item.deed_notes] });
+
+    const grantors = item?.people
+      .filter((person) => person.role === "grantor")
+      .map((person) => buildName(person));
+
+    const grantees = item?.people
+      .filter((person) => person.role === "grantee")
+      .map((person) => buildName(person));
+
+    const enslaved = item?.people
+      .filter((person) => person.role === "enslaved")
+      .map((person) => buildName(person, true));
+
+    if (grantors.length > 0) {
+      manifest.addMetadata({ none: ["Grantors"] }, { none: grantors });
+    }
+
+    if (grantees.length > 0) {
+      manifest.addMetadata({ none: ["Grantees"] }, { none: grantees });
+    }
+
+    if (enslaved.length > 0) {
+      manifest.addMetadata(
+        { none: ["Enslaved"] },
+        {
+          none: enslaved,
+        }
+      );
+    }
+
+    // define paragraph style description for the deed that includes all metadata and people along with their roles. the paragraph should describe the sale of people from grantors to grantees and include the names of the enslaved people.
+    const description = `The ${item.document_type} was recorded in ${
+      item.deed_county
+    } County, North Carolina on ${
+      item.deed_date
+    }. ${grantors.join()} sold the enslaved person(s) ${enslaved.join()} to ${grantees.join()}.`;
+
+    manifest.addSummary(description);
+
     manifest.createCanvas(`${baseId}/canvas/0`, (canvas) => {
       canvas.width = 1200;
       canvas.height = 1200;
@@ -127,4 +173,24 @@ function createManifest(item) {
     `${dir}/manifest/${item.filename}`,
     JSON.stringify(manifest)
   );
+
+  console.log(`Created manifest/${item.filename}`);
+
+  return;
+}
+
+function buildName(person, includeDetails = false) {
+  let name = "";
+
+  if (person.first_name) name += person.first_name;
+  if (person.middle_name) name += ` ${person.middle_name}`;
+  if (person.last_name) name += ` ${person.last_name}`;
+
+  if (includeDetails) {
+    if (person.color_race) name += ` - ${person.color_race}`;
+    if (person.sex) name += ` - ${person.sex}`;
+    if (person.age) name += ` - ${person.age}`;
+  }
+
+  return name;
 }
