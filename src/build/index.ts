@@ -146,6 +146,18 @@ function createManifest(item) {
 
     manifest.addSummary(description);
 
+    manifest.setHomepage({
+      id: `https://dlas.uncg.edu/deeds/deed/${item.deed_identifier}`,
+      type: "Text",
+      label: { none: ["Digital Library on American Slavery"] },
+      format: "text/html",
+    });
+
+    manifest.setPartOf({
+      id: `${apiUrl}/collection/deeds.json`,
+      type: "Collection",
+    });
+
     manifest.createCanvas(`${baseId}/canvas/0`, (canvas) => {
       canvas.width = 1200;
       canvas.height = 1200;
